@@ -2,14 +2,13 @@ package dev.patika.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
+
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -20,18 +19,19 @@ import java.util.List;
 public class Animal {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "id", columnDefinition = "serial")
     private Long id;
 
-
-    @Column(name = "name",nullable = false)
+    @NotNull
+    @Column(name = "name")
     private String name;
 
+    @NotNull
     @Column(name = "species")
     private String species;
 
-
-    @Column(name = "breed",nullable = false)
+    @NotNull
+    @Column(name = "breed")
     private String breed;
 
     @Column(name = "gender")
@@ -40,11 +40,15 @@ public class Animal {
     @Column(name = "color")
     private String color;
 
+    @Column(name = "date_of_birth")
+    private LocalDate dateOfBirth;
+
     @OneToMany(mappedBy = "animal",fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Appointment> appointmentList;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "customer_id")
+    @JsonIgnore
     private Customer customer;
 
     @OneToMany(mappedBy = "animal",fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
